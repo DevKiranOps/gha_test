@@ -1,0 +1,37 @@
+name: GitHub Test
+on:
+  workflow_dispatch:
+    inputs:
+      c_one: 
+        type: choice
+        description: "First Variable"
+        options:
+          - "Do"
+          - "Dont do"
+        default: "Do"
+  push:
+    branches:
+      - main
+      - release/*
+env:
+  var_one: "Do"
+
+jobs:
+  test-input:
+    runs-on: "ubuntu-22.04"
+    steps:
+      - name: Test Input value
+        run: echo "${{ github.event.inputs.c_one }}"
+      - name: set action
+        run: |
+          if [[ ${{ github.event.inputs.c_one }} == "" ]]
+          then
+            echo "Action=${{ env.var_one }}" >> $GITHUB_ENV
+          else
+            echo "Action=${{ github.event.inputs.c_one }}" >> $GITHUB_ENV
+          fi 
+      - name: Check Action value
+        run: |
+          echo "${{ env.Action }}"
+
+  
