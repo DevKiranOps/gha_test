@@ -20,18 +20,18 @@ jobs:
   test-input:
     runs-on: "ubuntu-22.04"
     steps:
-      - name: Test Input value
-        run: echo "${{ github.event.inputs.c_one }}"
-      - name: set action
-        run: |
-          if [[ ${{ github.event.inputs.c_one }} == "" ]]
-          then
-            echo "Action=${{ env.var_one }}" >> $GITHUB_ENV
-          else
-            echo "Action=${{ github.event.inputs.c_one }}" >> $GITHUB_ENV
-          fi 
-      - name: Check Action value
-        run: |
-          echo "${{ env.Action }}"
+      - name: Check the trigger
+        run: echo "${{ github.event_name }}"
+      # - name: set action
+      #   run: |
+      #     if [[ ${{ github.event.inputs.c_one }} == "" ]]
+      #     then
+      #       echo "Action=${{ env.var_one }}" >> $GITHUB_ENV
+      #     else
+      #       echo "Action=${{ github.event.inputs.c_one }}" >> $GITHUB_ENV
+      #     fi 
+      # - name: Check Action value
+      #   run: |
+      #     echo "${{ env.Action }}"
 
   
