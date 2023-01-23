@@ -14,7 +14,7 @@ on:
       - main
       - release/*
 env:
-  var_one: "Do"
+  var_one: "Dont do"
 
 jobs:
   test-input:
