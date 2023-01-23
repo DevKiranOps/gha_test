@@ -24,12 +24,17 @@ jobs:
         run: echo "${{ github.event_name }}"
       - name: set action
         run: |
+          echo "Set up environment"
           if [[ ${{ github.event_name}} == "push"  ]]
           then
             echo "Action=${{ env.var_one }}" >> $GITHUB_ENV
-          else
+          elif [[ ${{ github.event_name == "workflow_dispatch" }} ]]
+          then
             echo "Action=${{ github.event.inputs.c_one }}" >> $GITHUB_ENV
+          else
+            echo "Not allowed event type"
           fi 
+
       - name: Check Action value
         run: |
           echo "${{ env.Action }}"
