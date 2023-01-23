@@ -25,10 +25,11 @@ jobs:
       - name: set action
         run: |
           echo "Set up environment"
-          if [[ ${{ github.event_name}} == "workflow_dispatch"  ]]
+          if [[ ${{ github.event_name }} == "workflow_dispatch"  ]]
           then
             echo "Action=${{ github.event.inputs.c_one }}" >> $GITHUB_ENV
-          else
+          elif [[ ${{ github.event_name }} == "push" ]]
+          then
             echo "Action=${{ env.var_one }}" >> $GITHUB_ENV
           fi 
 
