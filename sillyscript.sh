@@ -3,5 +3,5 @@
 echo "Check the action"
 
 echo "Somem silly "
-ech "Fix Fix Fix"
+ech "Fix Fix"
 echo "$ACTION"
