@@ -33,6 +33,30 @@ jobs:
             echo "Action=${{ env.var_one }}" >> $GITHUB_ENV
           fi 
 
+      - name: Generate Semantic Versioning
+        id: semver
+        run: |
+          git fetch --tags
+          git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:%s | grep -E '^(feat|fix|perf|revert|docs|style|refactor|test|chore)(\([a-zA-Z0-9-]+\))?:' | awk 'BEGIN {major=0; minor=0; patch=0} {if ($1 == "feat") minor++; else if ($1 == "fix") patch++; else major++} END {print major "." minor "." patch}' | awk -F"." '{print "v"$1"."$2"."$3}' | tee version.txt
+      - name: Create Git tag
+        run: |
+          tag=$(cat version.txt)
+          git tag $tag
+          git push origin $tag
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.semver.outputs.version }}
+          release_name: Release ${{ steps.semver.outputs.version }}
+          body: |
+            Release ${{ steps.semver.outputs.version }}
+            Changes:
+            - ...
+          draft: false
+          prerelease: false    
+
       - name: Check Action value
         run: |
           echo "${{ env.Action }}"
