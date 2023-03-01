@@ -6,3 +6,4 @@ echo "Somem silly "
 ech "Fix Fix"
 echo "LOL New feature"
 echo "$ACTION"
+echo Silly
