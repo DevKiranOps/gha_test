@@ -47,7 +47,10 @@ jobs:
         id: semver
         run: |
           git fetch --tags
-          git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:%s | grep -E '^(BREAKING|feat|fix|perf|revert|docs|style|refactor|test|chore)(([a-zA-Z0-9-]+))?:' |cut -d ":" -f 1 | awk 'BEGIN {major=0; minor=0; patch=0} {if ($1 == "feat") minor++; else if ($1 == "fix") patch++; else major++} END {print major "." minor "." patch}
+          git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:%s | \
+          grep -E '^(BREAKING|feat|fix|perf|revert|docs|style|refactor|test|chore)(\([a-zA-Z0-9-]+\))?:' | \
+          awk 'BEGIN {major=0; minor=0; patch=0} {if ($1 == "feat") minor++; else if ($1 == "fix") patch++; else if ($1 == "BREAKING") major++} END {print major "." minor "." patch}' | \
+          awk -F"." '{print "v"$1"."$2"."$3}' | tee version.txt                                  
           echo "tag_name=$(cat version.txt)" >> $GITHUB_ENV
       - name: Create Git tag
         env:
