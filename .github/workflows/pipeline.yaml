@@ -20,6 +20,10 @@ jobs:
   test-input:
     runs-on: "ubuntu-22.04"
     steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
       - name: Check the trigger
         run: echo "${{ github.event_name }}"
       - name: set action
