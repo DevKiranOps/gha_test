@@ -47,7 +47,7 @@ jobs:
         id: semver
         run: |
           git fetch --tags
-          git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:%s | grep -E '^(BREAKING|feat|fix|perf|revert|docs|style|refactor|test|chore)(([a-zA-Z0-9-]+))?:' 
+          git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:%s | grep -E '^(BREAKING|feat|fix|perf|revert|docs|style|refactor|test|chore)(([a-zA-Z0-9-]+))?:' | awk '{print $1}'
 
       #     echo "tag_name=$(cat version.txt)" >> $GITHUB_ENV
       # - name: Create Git tag
