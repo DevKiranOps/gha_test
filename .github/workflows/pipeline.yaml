@@ -47,34 +47,32 @@ jobs:
         id: semver
         run: |
           git fetch --tags
-          git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:%s | \
-          grep -E '^(BREAKING|feat|fix|perf|revert|docs|style|refactor|test|chore)(\([a-zA-Z0-9-]+\))?:' | \
-          awk 'BEGIN {major=0; minor=0; patch=0} {if ($1 == "feat") minor++; else if ($1 == "fix") patch++; else if ($1 == "BREAKING") major++} END {print major "." minor "." patch}' | \
-          awk -F"." '{print "v"$1"."$2"."$3}' | tee version.txt                                  
-          echo "tag_name=$(cat version.txt)" >> $GITHUB_ENV
-      - name: Create Git tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          tag=$(cat version.txt)
-          git tag $tag
-          git push origin $tag
-      - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.tag_name }}
-          release_name: Release ${{ steps.semver.outputs.version }}
-          body: |
-            Release ${{ steps.semver.outputs.version }}
-            Changes:
-          draft: false
-          prerelease: false    
+          git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:%s | grep -E '^(BREAKING|feat|fix|perf|revert|docs|style|refactor|test|chore)(([a-zA-Z0-9-]+))?:' 
 
-      - name: Check Action value
-        run: |
-          echo "${{ env.Action }}"
-          echo "${{ github.run_number }}"
+      #     echo "tag_name=$(cat version.txt)" >> $GITHUB_ENV
+      # - name: Create Git tag
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     tag=$(cat version.txt)
+      #     git tag $tag
+      #     git push origin $tag
+      # - name: Create Release
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: ${{ env.tag_name }}
+      #     release_name: Release ${{ steps.semver.outputs.version }}
+      #     body: |
+      #       Release ${{ steps.semver.outputs.version }}
+      #       Changes:
+      #     draft: false
+      #     prerelease: false    
+
+      # - name: Check Action value
+      #   run: |
+      #     echo "${{ env.Action }}"
+      #     echo "${{ github.run_number }}"
 
   
